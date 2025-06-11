@@ -1,0 +1,57 @@
+[
+  {
+    "id": "1",
+    "title": "Review quarterly marketing campaign performance",
+    "description": "Analyze metrics from Q3 campaigns including email open rates, social media engagement, and conversion data. Prepare executive summary for leadership team.",
+    "dueDate": "2024-01-15T09:00:00.000Z",
+    "priority": "high",
+    "category": "Work",
+    "completed": false,
+    "createdAt": "2024-01-10T08:30:00.000Z",
+    "completedAt": null
+  },
+  {
+    "id": "2",
+    "title": "Schedule annual health checkup",
+    "description": "Call Dr. Smith's office to book routine physical exam and blood work. Also schedule dental cleaning for next month.",
+    "dueDate": "2024-01-20T14:00:00.000Z",
+    "priority": "medium",
+    "category": "Personal",
+    "completed": false,
+    "createdAt": "2024-01-08T10:15:00.000Z",
+    "completedAt": null
+  },
+  {
+    "id": "3",
+    "title": "Implement user authentication system",
+    "description": "Build secure login/signup flow with JWT tokens, password hashing, and email verification. Include social OAuth options for Google and LinkedIn.",
+    "dueDate": "2024-01-25T17:00:00.000Z",
+    "priority": "high",
+    "category": "Development",
+    "completed": true,
+    "createdAt": "2024-01-05T09:45:00.000Z",
+    "completedAt": "2024-01-12T16:30:00.000Z"
+  },
+  {
+    "id": "4",
+    "title": "Plan weekend hiking trip to Blue Ridge Mountains",
+    "description": "Research trails, check weather forecast, pack camping gear, and coordinate with friends. Book campsite reservations and prepare trail maps.",
+    "dueDate": "2024-01-18T08:00:00.000Z",
+    "priority": "low",
+    "category": "Leisure",
+    "completed": false,
+    "createdAt": "2024-01-09T12:20:00.000Z",
+    "completedAt": null
+  },
+  {
+    "id": "5",
+    "title": "Complete React certification course",
+    "description": "Finish modules 8-12 covering advanced hooks, context API, and performance optimization. Take final assessment and download certificate.",
+    "dueDate": "1/30/2024 11:59:00 PM.000Z",
+    "priority": "medium",
+    "category": "Learning",
+    "completed": false,
+    "createdAt": "2024-01-07T14:10:00.000Z",
+    "completedAt": null
+  }
+]
