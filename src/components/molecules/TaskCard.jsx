@@ -1,25 +1,27 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { format, isToday, isTomorrow, isPast } from 'date-fns';
-import ApperIcon from './ApperIcon';
+import ApperIcon from '@/components/ApperIcon';
+import Button from '@/components/atoms/Button';
+import CategoryTag from '@/components/molecules/CategoryTag';
 
-const TaskCard = ({ 
-  task, 
-  categories, 
-  onUpdate, 
-  onDelete, 
-  onEdit, 
-  searchQuery, 
-  isCompleted = false 
+const TaskCard = ({
+  task,
+  categories,
+  onUpdate,
+  onDelete,
+  onEdit,
+  searchQuery,
+  isCompleted = false,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
 
   const category = categories.find(cat => cat.name === task.category);
-  
+
   const priorityColors = {
     low: '#4ECDC4',
-    medium: '#FFE66D', 
+    medium: '#FFE66D',
     high: '#FF6B6B'
   };
 
@@ -28,7 +30,7 @@ const TaskCard = ({
       setShowConfetti(true);
       setTimeout(() => setShowConfetti(false), 400);
     }
-    await onUpdate(task.id, { 
+    await onUpdate(task.id, {
       completed: !task.completed,
       completedAt: !task.completed ? new Date() : null
     });
@@ -37,7 +39,7 @@ const TaskCard = ({
   const formatDueDate = (date) => {
     if (!date) return null;
     const dueDate = new Date(date);
-    
+
     if (isToday(dueDate)) return 'Today';
     if (isTomorrow(dueDate)) return 'Tomorrow';
     return format(dueDate, 'MMM d');
@@ -49,8 +51,8 @@ const TaskCard = ({
     if (!query) return text;
     const regex = new RegExp(`(${query})`, 'gi');
     const parts = text.split(regex);
-    
-    return parts.map((part, index) => 
+
+    return parts.map((part, index) =>
       regex.test(part) ? (
         <mark key={index} className="bg-yellow-200 px-1 rounded">
           {part}
@@ -69,8 +71,8 @@ const TaskCard = ({
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
       className={`bg-white rounded-lg p-4 shadow-sm border transition-all relative overflow-hidden max-w-full ${
-        isCompleted 
-          ? 'opacity-75 border-gray-200' 
+        isCompleted
+          ? 'opacity-75 border-gray-200'
           : 'border-gray-100 hover:shadow-lg hover:border-gray-200'
       }`}
     >
@@ -105,7 +107,7 @@ const TaskCard = ({
 
       <div className="flex items-start space-x-3">
         {/* Completion Checkbox */}
-        <motion.button
+        <Button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           onClick={handleToggleComplete}
@@ -124,7 +126,7 @@ const TaskCard = ({
               <ApperIcon name="Check" className="w-4 h-4 text-white" />
             </motion.div>
           )}
-        </motion.button>
+        </Button>
 
         {/* Task Content */}
         <div className="flex-1 min-w-0">
@@ -134,22 +136,22 @@ const TaskCard = ({
             }`}>
               {highlightText(task.title, searchQuery)}
             </h3>
-            
+
             {/* Actions */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: isHovered || isCompleted ? 1 : 0 }}
               className="flex items-center space-x-1 ml-2 flex-shrink-0"
             >
-              <motion.button
+              <Button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={() => onEdit(task)}
                 className="p-1 text-gray-400 hover:text-primary transition-colors"
               >
                 <ApperIcon name="Edit2" className="w-4 h-4" />
-              </motion.button>
-              <motion.button
+              </Button>
+              <Button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={() => {
@@ -160,7 +162,7 @@ const TaskCard = ({
                 className="p-1 text-gray-400 hover:text-error transition-colors"
               >
                 <ApperIcon name="Trash2" className="w-4 h-4" />
-              </motion.button>
+              </Button>
             </motion.div>
           </div>
 
@@ -184,14 +186,7 @@ const TaskCard = ({
             </div>
 
             {/* Category */}
-            {category && (
-              <span
-                className="px-2 py-1 text-xs rounded-full text-gray-700"
-                style={{ backgroundColor: `${category.color}40` }}
-              >
-                {category.name}
-              </span>
-            )}
+            <CategoryTag category={category} />
 
             {/* Due Date */}
             {task.dueDate && (

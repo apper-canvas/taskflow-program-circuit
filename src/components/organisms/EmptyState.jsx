@@ -1,5 +1,7 @@
+import React from 'react';
 import { motion } from 'framer-motion';
-import ApperIcon from './ApperIcon';
+import ApperIcon from '@/components/ApperIcon';
+import Button from '@/components/atoms/Button';
 
 const EmptyState = ({ onCreateTask }) => {
   return (
@@ -10,11 +12,11 @@ const EmptyState = ({ onCreateTask }) => {
     >
       {/* Animated Icon */}
       <motion.div
-        animate={{ 
+        animate={{
           y: [0, -10, 0],
           rotate: [0, 5, -5, 0]
         }}
-        transition={{ 
+        transition={{
           duration: 4,
           repeat: Infinity,
           ease: "easeInOut"
@@ -23,7 +25,7 @@ const EmptyState = ({ onCreateTask }) => {
       >
         <div className="relative">
           <ApperIcon name="CheckSquare" className="w-20 h-20 text-primary mx-auto" />
-          
+
           {/* Floating particles */}
           {[...Array(3)].map((_, i) => (
             <motion.div
@@ -48,20 +50,20 @@ const EmptyState = ({ onCreateTask }) => {
           ))}
         </div>
       </motion.div>
-      
+
       <h3 className="text-2xl font-bold font-heading text-gray-900 mb-3">
         Ready to get organized?
       </h3>
-      
+
       <p className="text-gray-500 mb-8 leading-relaxed">
-        Start by creating your first task. Break down your goals into manageable steps 
+        Start by creating your first task. Break down your goals into manageable steps
         and watch your productivity soar!
       </p>
-      
+
       {/* CTA Button */}
-      <motion.button
-        whileHover={{ 
-          scale: 1.05, 
+      <Button
+        whileHover={{
+          scale: 1.05,
           brightness: 1.1,
           boxShadow: "0 10px 25px rgba(91, 70, 242, 0.3)"
         }}
@@ -71,8 +73,8 @@ const EmptyState = ({ onCreateTask }) => {
       >
         <ApperIcon name="Plus" className="w-5 h-5 mr-2" />
         Create Your First Task
-      </motion.button>
-      
+      </Button>
+
       {/* Tips */}
       <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4 text-left">
         {[

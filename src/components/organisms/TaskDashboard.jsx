@@ -1,17 +1,18 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import ApperIcon from './ApperIcon';
-import TaskCard from './TaskCard';
-import TaskForm from './TaskForm';
-import EmptyState from './EmptyState';
+import ApperIcon from '@/components/ApperIcon';
+import TaskCard from '@/components/molecules/TaskCard';
+import Button from '@/components/atoms/Button';
+import TaskForm from '@/components/organisms/TaskForm';
+import EmptyState from '@/components/organisms/EmptyState';
 
-const MainFeature = ({ 
-  tasks, 
-  categories, 
-  onTaskCreate, 
-  onTaskUpdate, 
+const TaskDashboard = ({
+  tasks,
+  categories,
+  onTaskCreate,
+  onTaskUpdate,
   onTaskDelete,
-  searchQuery 
+  searchQuery,
 }) => {
   const [showTaskForm, setShowTaskForm] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
@@ -24,11 +25,10 @@ const MainFeature = ({
   const handleTaskSubmit = async (taskData) => {
     if (editingTask) {
       await onTaskUpdate(editingTask.id, taskData);
-      setEditingTask(null);
     } else {
       await onTaskCreate(taskData);
     }
-    setShowTaskForm(false);
+    handleFormClose();
   };
 
   const handleFormClose = () => {
@@ -39,13 +39,21 @@ const MainFeature = ({
   const activeTasks = tasks.filter(task => !task.completed);
   const completedTasks = tasks.filter(task => task.completed);
 
+  // If there are no tasks AT ALL and no search query, show the initial empty state.
+  // This state is managed at the HomePage level where `tasks` is the *full* list.
+  // The `TaskDashboard` receives `filteredTasks`, so it only knows about tasks after filtering.
+  // Original logic was "if tasks.length === 0 && !searchQuery".
+  // To preserve original functionality, we'll keep this check here, assuming `tasks` passed IS the filtered set.
+  // The `HomePage` will manage the overall empty state, and this component will handle a search-specific empty state.
+  // The original `MainFeature` component effectively contained this empty state logic.
+  // Thus, this logic remains here, but `tasks` now refers to the `filteredTasks` passed down.
+
   if (tasks.length === 0 && !searchQuery) {
     return (
       <div className="p-6">
-        <EmptyState 
+        <EmptyState
           onCreateTask={() => setShowTaskForm(true)}
         />
-        
         <AnimatePresence>
           {showTaskForm && (
             <TaskForm
@@ -64,7 +72,7 @@ const MainFeature = ({
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 p-6 h-full max-w-full overflow-hidden">
       {/* Task List */}
       <div className="lg:col-span-2 space-y-4 overflow-y-auto custom-scrollbar min-w-0">
-        {tasks.length === 0 && searchQuery ? (
+        {tasks.length === 0 && searchQuery ? ( // This is for no search results
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -140,7 +148,7 @@ const MainFeature = ({
 
       {/* Quick Add Panel */}
       <div className="space-y-4 overflow-y-auto custom-scrollbar min-w-0">
-        <motion.button
+        <Button
           whileHover={{ scale: 1.02, brightness: 1.1 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => setShowTaskForm(true)}
@@ -148,7 +156,7 @@ const MainFeature = ({
         >
           <ApperIcon name="Plus" className="w-5 h-5" />
           <span className="font-medium">Add New Task</span>
-        </motion.button>
+        </Button>
 
         {/* Quick Stats */}
         <div className="bg-white rounded-lg p-6 shadow-sm">
@@ -177,12 +185,12 @@ const MainFeature = ({
               {categories.map(category => {
                 const categoryTasks = tasks.filter(task => task.category === category.name);
                 const completedInCategory = categoryTasks.filter(task => task.completed).length;
-                
+
                 return (
                   <div key={category.id} className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
-                      <div 
-                        className="w-3 h-3 rounded-full" 
+                      <div
+                        className="w-3 h-3 rounded-full"
                         style={{ backgroundColor: category.color }}
                       />
                       <span className="text-sm text-gray-600 break-words min-w-0">{category.name}</span>
@@ -213,4 +221,4 @@ const MainFeature = ({
   );
 };
 
-export default MainFeature;
+export default TaskDashboard;

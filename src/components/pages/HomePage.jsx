@@ -1,11 +1,13 @@
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
-import ApperIcon from '../components/ApperIcon';
-import MainFeature from '../components/MainFeature';
-import { taskService, categoryService } from '../services';
+import ApperIcon from '@/components/ApperIcon';
+import Button from '@/components/atoms/Button';
+import Input from '@/components/atoms/Input';
+import TaskDashboard from '@/components/organisms/TaskDashboard'; // New organism component
+import { taskService, categoryService } from '@/services';
 
-const Home = () => {
+const HomePage = () => {
   const [tasks, setTasks] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -48,10 +50,10 @@ const Home = () => {
   const handleTaskUpdate = async (taskId, updates) => {
     try {
       const updatedTask = await taskService.update(taskId, updates);
-      setTasks(prev => prev.map(task => 
+      setTasks(prev => prev.map(task =>
         task.id === taskId ? updatedTask : task
       ));
-      
+
       if (updates.completed !== undefined) {
         toast.success(updates.completed ? 'Task completed! 🎉' : 'Task reopened');
       } else {
@@ -98,7 +100,7 @@ const Home = () => {
             </div>
           </div>
         </div>
-        
+
         {/* Content Skeleton */}
         <div className="flex-1 overflow-y-auto p-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -145,14 +147,14 @@ const Home = () => {
           <ApperIcon name="AlertCircle" className="w-16 h-16 text-error mx-auto mb-4" />
           <h3 className="text-lg font-medium text-gray-900 mb-2">Something went wrong</h3>
           <p className="text-gray-500 mb-4">{error}</p>
-          <motion.button
+          <Button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={loadData}
             className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-secondary transition-colors"
           >
             Try Again
-          </motion.button>
+          </Button>
         </motion.div>
       </div>
     );
@@ -169,7 +171,7 @@ const Home = () => {
               {completedTasksCount} of {totalTasksCount} tasks completed
             </p>
           </div>
-          
+
           {/* Progress Ring */}
           <div className="relative w-16 h-16">
             <svg className="w-16 h-16 transform -rotate-90" viewBox="0 0 36 36">
@@ -201,18 +203,18 @@ const Home = () => {
         {/* Search Bar */}
         <div className="relative mb-4">
           <ApperIcon name="Search" className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-          <input
+          <Input
             type="text"
             placeholder="Search tasks..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+            className="pl-10 pr-4 py-3"
           />
         </div>
 
         {/* Category Filters */}
         <div className="flex flex-wrap gap-2">
-          <motion.button
+          <Button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => setSelectedCategory('all')}
@@ -223,11 +225,11 @@ const Home = () => {
             }`}
           >
             All ({tasks.length})
-          </motion.button>
+          </Button>
           {categories.map(category => {
             const categoryTasks = tasks.filter(task => task.category === category.name);
             return (
-              <motion.button
+              <Button
                 key={category.id}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
@@ -238,21 +240,21 @@ const Home = () => {
                     : 'text-gray-600 hover:brightness-110'
                 }`}
                 style={{
-                  backgroundColor: selectedCategory === category.name 
-                    ? category.color 
+                  backgroundColor: selectedCategory === category.name
+                    ? category.color
                     : `${category.color}40`
                 }}
               >
                 {category.name} ({categoryTasks.length})
-              </motion.button>
+              </Button>
             );
           })}
         </div>
       </div>
 
-      {/* Main Content */}
+      {/* Main Content (Task Dashboard) */}
       <div className="flex-1 overflow-y-auto custom-scrollbar">
-        <MainFeature
+        <TaskDashboard
           tasks={filteredTasks}
           categories={categories}
           onTaskCreate={handleTaskCreate}
@@ -265,4 +267,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomePage;
